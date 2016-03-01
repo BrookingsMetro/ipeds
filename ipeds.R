@@ -1,10 +1,8 @@
-setwd("V:\\IPEDS")
+setwd("V:\\IPEDS\\Code\\ipeds")
 library('dplyr')
 
-csxwalk <- read.csv('CIPxwalk\\compSci.csv')
-stemxwalk <- read.csv('CIPxwalk\\allSTEM.csv')
-
-save.image()
+csxwalk <- read.csv('Crosswalks\\compSci.csv')
+stemxwalk <- read.csv('Crosswalks\\allSTEM.csv')
 
 csxwalk$CIPCODE <- (substr(csxwalk$Code, 1,7))
 csxwalk <- as.data.frame(sapply(csxwalk,gsub,pattern="-",replacement='.'))
