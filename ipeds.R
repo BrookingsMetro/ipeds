@@ -51,6 +51,7 @@ byState2011 <- left_join(byState2011, stemxwalk)
 byState2011 <- left_join(byState2011, csxwalk)
 
 
+
 g2014 <- group_by(c2014, STABBR, AWLEVEL, CIPCODE)
 byState2014 <- as.data.frame(summarise(g2014, totalawards = sum(CTOTALT)))
 stateTotal2014 <- filter(byState2014, CIPCODE == 99)
@@ -61,6 +62,6 @@ byState2014 <- merge(byState2014, stemxwalk, by=c('CIPCODE'))
 byState2014 <- merge(byState2014, csxwalk, by=c("CIPCODE"))
 
 write.csv(byState2010,'awardsByStateByCIP2010.csv')
-
+write.csv(byState2011,'awardsByStateByCIP2011.csv')
 write.csv(byState2014,'awardsByStateByCIP2014.csv')
 
