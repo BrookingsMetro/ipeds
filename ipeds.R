@@ -1,18 +1,10 @@
 setwd("V:\\IPEDS\\Code\\ipeds")
 library('dplyr')
 
-csxwalk <- read.csv('Crosswalks\\compSci.csv')
-stemxwalk <- read.csv('Crosswalks\\allSTEM.csv')
-
-csxwalk$CIPCODE <- (substr(csxwalk$Code, 1,7))
-csxwalk <- as.data.frame(sapply(csxwalk,gsub,pattern="-",replacement='.'))
-csxwalk$CIPCODE <- as.numeric(csxwalk$CIPCODE)
-csxwalk$compSci <- 1
-
-stemxwalk$CIPCODE <- as.numeric(substr(stemxwalk$Code, 1,7))
-stemxwalk <- as.data.frame(sapply(stemxwalk,gsub,pattern='-',replacement='.'))
-stemxwalk$CIPCODE <- as.numeric(stemxwalk$CIPCODE)
-stemxwalk$STEM <- 1
+onet <- read.csv('Crosswalks\\ciponet.csv')
+onet$CIPCODE <- as.numeric(substr(onet$cipcode,1,7))
+onet <- mutate(onet, comp_high_any = as.numeric(comp_score > (mean(onet$comp_score, na.rm=TRUE) + sd(onet$comp_score, na.rm=TRUE))))
+onet <- select(onet, CIPCODE, comp_high_any, stem_high_any)
 
 c2010 <- read.csv('Completions\\c2010_a_rv.csv')
 c2011 <- read.csv('Completions\\c2011_a_rv.csv')
@@ -32,14 +24,20 @@ c2012 <- merge(hd2012, c2012, by='UNITID')
 c2013 <- merge(hd2013, c2013, by='UNITID')
 c2014 <- merge(hd2014, c2014, by='UNITID')
 
+
 g2010 <- group_by(c2010, STABBR, AWLEVEL, CIPCODE)
 byState2010 <- as.data.frame(summarise(g2010, totalawards = sum(CTOTALT)))
 stateTotal2010 <- filter(byState2010, CIPCODE == 99)
 stateTotal2010 <- select(stateTotal2010, STABBR, AWLEVEL, totalawards)
 names(stateTotal2010) <- c('STABBR','AWLEVEL','statetotals')
 byState2010 <- merge(byState2010, stateTotal2010, by=c('STABBR','AWLEVEL'))
-byState2010 <- left_join(byState2010, stemxwalk)
-byState2010 <- left_join(byState2010, csxwalk)
+byState2010 <- left_join(byState2010, onet)
+byState2010$share <- byState2010$totalawards / byState2010$statetotals
+
+attach(byState2010)
+stemShare <- aggregate(byState2010$share, by=list(stem_high_any,STABBR,AWLEVEL), FUN=sum, na.rm=TRUE)
+compShare <- aggregate(byState2010$share, by=list(comp_high_any,STABBR,AWLEVEL), FUN=sum, na.rm=TRUE)
+
 
 g2011 <- group_by(c2011, STABBR, AWLEVEL, CIPCODE)
 byState2011 <- as.data.frame(summarise(g2011, totalawards = sum(CTOTALT)))
@@ -49,8 +47,6 @@ names(stateTotal2011) <- c('STABBR','AWLEVEL','statetotals')
 byState2011 <- merge(byState2011, stateTotal2011, by=c('STABBR','AWLEVEL'))
 byState2011 <- left_join(byState2011, stemxwalk)
 byState2011 <- left_join(byState2011, csxwalk)
-
-
 
 g2014 <- group_by(c2014, STABBR, AWLEVEL, CIPCODE)
 byState2014 <- as.data.frame(summarise(g2014, totalawards = sum(CTOTALT)))
