@@ -24,40 +24,51 @@ c2012 <- merge(hd2012, c2012, by='UNITID')
 c2013 <- merge(hd2013, c2013, by='UNITID')
 c2014 <- merge(hd2014, c2014, by='UNITID')
 
+c2010$year <- 2010
+c2010 <- select(c2010,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
+c2011$year <- 2011
+c2011 <- select(c2011,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
+c2012$year <- 2012
+c2012 <- select(c2012,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
+c2013$year <- 2013
+c2013 <- select(c2013,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
+c2014$year <- 2014
+c2014 <- select(c2014,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
 
-g2010 <- group_by(c2010, STABBR, AWLEVEL, CIPCODE)
-byState2010 <- as.data.frame(summarise(g2010, totalawards = sum(CTOTALT)))
-stateTotal2010 <- filter(byState2010, CIPCODE == 99)
-stateTotal2010 <- select(stateTotal2010, STABBR, AWLEVEL, totalawards)
-names(stateTotal2010) <- c('STABBR','AWLEVEL','statetotals')
-byState2010 <- merge(byState2010, stateTotal2010, by=c('STABBR','AWLEVEL'))
-byState2010 <- left_join(byState2010, onet)
-byState2010$share <- byState2010$totalawards / byState2010$statetotals
+total <- rbind(c2010,c2011,c2012,c2013,c2014)
 
-attach(byState2010)
-stemShare <- aggregate(byState2010$share, by=list(stem_high_any,STABBR,AWLEVEL), FUN=sum, na.rm=TRUE)
-compShare <- aggregate(byState2010$share, by=list(comp_high_any,STABBR,AWLEVEL), FUN=sum, na.rm=TRUE)
+groupState <- group_by(total, STABBR, AWLEVEL, CIPCODE, year)
+byState <- as.data.frame(summarise(groupState, totalawards = sum(CTOTALT)))
+stateTotal <- filter(byState, CIPCODE == 99)
+stateTotal <- select(stateTotal, STABBR, AWLEVEL, totalawards,year)
+names(stateTotal) <- c('STABBR','AWLEVEL','statetotal','year')
+byState <- merge(byState, stateTotal, by=c('STABBR','AWLEVEL','year'))
+byState <- left_join(byState, onet, by='CIPCODE')
+byState$share <- byState$totalawards / byState$statetotal
 
+attach(byState)
+stemShareState <- aggregate(byState$share, by=list(stem_high_any,STABBR,AWLEVEL,year), FUN=sum, na.rm=TRUE)
+names(stemShareState) <- c('stem','state','awlevel','year','share')
+compShareState <- aggregate(byState$share, by=list(comp_high_any,STABBR,AWLEVEL,year), FUN=sum, na.rm=TRUE)
+names(compShareState) <- c('comp','state','awlevel','year','share')
 
-g2011 <- group_by(c2011, STABBR, AWLEVEL, CIPCODE)
-byState2011 <- as.data.frame(summarise(g2011, totalawards = sum(CTOTALT)))
-stateTotal2011 <- filter(byState2011, CIPCODE == 99)
-stateTotal2011 <- select(stateTotal2011, STABBR, AWLEVEL, totalawards)
-names(stateTotal2011) <- c('STABBR','AWLEVEL','statetotals')
-byState2011 <- merge(byState2011, stateTotal2011, by=c('STABBR','AWLEVEL'))
-byState2011 <- left_join(byState2011, stemxwalk)
-byState2011 <- left_join(byState2011, csxwalk)
+groupCBSA <- group_by(total, CBSA, AWLEVEL, CIPCODE, year)
+byCBSA <- as.data.frame(summarise(groupCBSA, totalawards = sum(CTOTALT)))
+CBSATotal <- filter(byCBSA, CIPCODE == 99)
+CBSATotal <- select(CBSATotal, CBSA, AWLEVEL, totalawards,year)
+names(CBSATotal) <- c('CBSA','AWLEVEL','CBSAtotal','year')
+byCBSA <- merge(byCBSA, CBSATotal, by=c('CBSA','AWLEVEL','year'))
+byCBSA <- left_join(byCBSA, onet, by='CIPCODE')
+byCBSA$share <- byCBSA$totalawards / byCBSA$CBSAtotal
 
-g2014 <- group_by(c2014, STABBR, AWLEVEL, CIPCODE)
-byState2014 <- as.data.frame(summarise(g2014, totalawards = sum(CTOTALT)))
-stateTotal2014 <- filter(byState2014, CIPCODE == 99)
-stateTotal2014 <- select(stateTotal2014, STABBR, AWLEVEL, totalawards)
-names(stateTotal2014) <- c('STABBR','AWLEVEL','statetotals')
-byState2014 <- merge(byState2014, stateTotal2014, by=c('STABBR','AWLEVEL'))
-byState2014 <- merge(byState2014, stemxwalk, by=c('CIPCODE'))
-byState2014 <- merge(byState2014, csxwalk, by=c("CIPCODE"))
+attach(byCBSA)
+stemShareCBSA <- aggregate(byCBSA$share, by=list(stem_high_any,CBSA,AWLEVEL,year), FUN=sum, na.rm=TRUE)
+names(stemShareCBSA) <- c('stem','cbsa','awlevel','year','share')
+compShareCBSA <- aggregate(byCBSA$share, by=list(comp_high_any,CBSA,AWLEVEL,year), FUN=sum, na.rm=TRUE)
+names(compShareCBSA) <- c('comp','cbsa','awlevel','year','share')
 
-write.csv(byState2010,'awardsByStateByCIP2010.csv')
-write.csv(byState2011,'awardsByStateByCIP2011.csv')
-write.csv(byState2014,'awardsByStateByCIP2014.csv')
+write.csv(stemShareState,'stemByState.csv')
+write.csv(compShareState,'compByState.csv')
+write.csv(stemShareCBSA, 'stemByCBSA.csv')
+write.csv(compShareCBSA, 'compByCBSA.csv')
 
