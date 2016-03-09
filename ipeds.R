@@ -1,10 +1,12 @@
 setwd("V:\\IPEDS\\Code\\ipeds")
 library('dplyr')
 
-onet <- read.csv('Crosswalks\\ciponet.csv')
+onet <- read.csv('Crosswalks\\ciponet.csv', stringsAsFactors=FALSE)
 onet$CIPCODE <- as.numeric(substr(onet$cipcode,1,7))
 onet <- mutate(onet, comp_high_any = as.numeric(comp_score > (mean(onet$comp_score, na.rm=TRUE) + sd(onet$comp_score, na.rm=TRUE))))
 onet <- select(onet, CIPCODE, comp_high_any, stem_high_any)
+
+awlevel <- read.csv('Crosswalks\\awlevel.csv', stringsAsFactors=FALSE)
 
 c2010 <- read.csv('Completions\\c2010_a_rv.csv')
 c2011 <- read.csv('Completions\\c2011_a_rv.csv')
@@ -36,8 +38,9 @@ c2014$year <- 2014
 c2014 <- select(c2014,STABBR,CBSA,AWLEVEL,CTOTALT,year,CIPCODE)
 
 total <- rbind(c2010,c2011,c2012,c2013,c2014)
+total <- left_join(total, awlevel, by='AWLEVEL')
 
-groupState <- group_by(total, STABBR, AWLEVEL, CIPCODE, year)
+groupState <- group_by(total, STABBR, AWLEVEL, CIPCODE, year, degType)
 byState <- as.data.frame(summarise(groupState, totalawards = sum(CTOTALT)))
 stateTotal <- filter(byState, CIPCODE == 99)
 stateTotal <- select(stateTotal, STABBR, AWLEVEL, totalawards,year)
@@ -52,7 +55,26 @@ names(stemShareState) <- c('stem','state','awlevel','year','share')
 compShareState <- aggregate(byState$share, by=list(comp_high_any,STABBR,AWLEVEL,year), FUN=sum, na.rm=TRUE)
 names(compShareState) <- c('comp','state','awlevel','year','share')
 
-groupCBSA <- group_by(total, CBSA, AWLEVEL, CIPCODE, year)
+attach(byState)
+degStateCip <- aggregate(totalawards, by=list(STABBR,degType,year,stem_high_any), FUN=sum, na.rm=TRUE)
+names(degStateCip) <- c('STABBR','degType','year','stem_high_any','totalawards')
+degState <- aggregate(totalawards, by=list(STABBR,degType,year), FUN=sum, na.rm=TRUE)
+names(degState) <- c('STABBR','degType','year','statetotal')
+degStateStem <- merge(degState,degStateCip,by=c('STABBR','degType','year'))
+degStateStem$statetotal <- degStateStem$statetotal / 2
+degStateStem$share <- degStateStem$totalawards / degStateStem$statetotal
+
+attach(byState)
+degStateCip <- aggregate(totalawards, by=list(STABBR,degType,year,comp_high_any), FUN=sum, na.rm=TRUE)
+names(degStateCip) <- c('STABBR','degType','year','comp_high_any','totalawards')
+degState <- aggregate(totalawards, by=list(STABBR,degType,year), FUN=sum, na.rm=TRUE)
+names(degState) <- c('STABBR','degType','year','statetotal')
+degStateComp <- merge(degState,degStateCip,by=c('STABBR','degType','year'))
+degStateComp$statetotal <- degStateComp$statetotal / 2
+degStateComp$share <- degStateComp$totalawards / degStateComp$statetotal
+
+##CBSA
+groupCBSA <- group_by(total, CBSA, AWLEVEL, CIPCODE, year, degType)
 byCBSA <- as.data.frame(summarise(groupCBSA, totalawards = sum(CTOTALT)))
 CBSATotal <- filter(byCBSA, CIPCODE == 99)
 CBSATotal <- select(CBSATotal, CBSA, AWLEVEL, totalawards,year)
@@ -67,8 +89,30 @@ names(stemShareCBSA) <- c('stem','cbsa','awlevel','year','share')
 compShareCBSA <- aggregate(byCBSA$share, by=list(comp_high_any,CBSA,AWLEVEL,year), FUN=sum, na.rm=TRUE)
 names(compShareCBSA) <- c('comp','cbsa','awlevel','year','share')
 
+attach(byCBSA)
+degCbsaCip <- aggregate(totalawards, by=list(CBSA,degType,year,stem_high_any), FUN=sum, na.rm=TRUE)
+names(degCbsaCip) <- c('CBSA','degType','year','stem_high_any','totalawards')
+degCbsa <- aggregate(totalawards, by=list(CBSA,degType,year), FUN=sum, na.rm=TRUE)
+names(degCbsa) <- c('CBSA','degType','year','Cbsatotal')
+degCbsaStem <- merge(degCbsa,degCbsaCip,by=c('CBSA','degType','year'))
+degCbsaStem$Cbsatotal <- degCbsaStem$Cbsatotal / 2
+degCbsaStem$share <- degCbsaStem$totalawards / degCbsaStem$Cbsatotal
+
+attach(byCBSA)
+degCbsaCip <- aggregate(totalawards, by=list(CBSA,degType,year,comp_high_any), FUN=sum, na.rm=TRUE)
+names(degCbsaCip) <- c('CBSA','degType','year','comp_high_any','totalawards')
+degCbsa <- aggregate(totalawards, by=list(CBSA,degType,year), FUN=sum, na.rm=TRUE)
+names(degCbsa) <- c('CBSA','degType','year','Cbsatotal')
+degCbsaComp <- merge(degCbsa,degCbsaCip,by=c('CBSA','degType','year'))
+degCbsaComp$Cbsatotal <- degCbsaComp$Cbsatotal / 2
+degCbsaComp$share <- degCbsaComp$totalawards / degCbsaComp$Cbsatotal
+
 write.csv(stemShareState,'stemByState.csv')
 write.csv(compShareState,'compByState.csv')
 write.csv(stemShareCBSA, 'stemByCBSA.csv')
 write.csv(compShareCBSA, 'compByCBSA.csv')
 
+write.csv(degCbsaComp, 'compByCBSAByDegree.csv')
+write.csv(degCbsaStem, 'stemByCBSAByDegree.csv')
+write.csv(degStateComp, 'compByStateByDegree.csv')
+write.csv(degStateStem, 'stemByStateByDegree.csv')
