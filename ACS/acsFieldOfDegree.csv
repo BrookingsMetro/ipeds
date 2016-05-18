@@ -1,0 +1,33 @@
+varName,varDesc,descType,desc,tableName,descName
+B15010_001E,Total,total,Total,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,total
+B15010_001M,Margin of Error forTotal,moe,Total MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_002E,"Science and EngineeringComputers, Mathematics and Statistics",stem,STEM Comp Math and Stats,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem1
+B15010_002M,"Margin of Error forScience and EngineeringComputers, Mathematics and Statistics",moe,STEM Comp Math and Stats MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_003E,"Science and EngineeringBiological, Agricultural, and Environmental Sciences",stem,STEM Bio Argicultural Environmental Science,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem2
+B15010_003M,"Margin of Error forScience and EngineeringBiological, Agricultural, and Environmental Sciences",moe,STEM Bio Argicultural Environmental Science MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_004E,Science and EngineeringPhysical and Related Sciences,stem,STEM Physical and Related,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem3
+B15010_004M,Margin of Error forScience and EngineeringPhysical and Related Sciences,moe,STEM Physical and Related MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_005E,Science and EngineeringPsychology,stem,STEM Psychology,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem4
+B15010_005M,Margin of Error forScience and EngineeringPsychology,moe,STEM Psychology MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_006E,Science and EngineeringSocial Sciences,stem,STEM Social Sciences,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem5
+B15010_006M,Margin of Error forScience and EngineeringSocial Sciences,moe,STEM Social Sciences MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_007E,Science and EngineeringEngineering,stem,STEM Engineering,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem6
+B15010_007M,Margin of Error forScience and EngineeringEngineering,moe,STEM Engineering MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_008E,Science and EngineeringMultidisciplinary Studies,stem,STEM Multidisciplinary ,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem7
+B15010_008M,Margin of Error forScience and EngineeringMultidisciplinary Studies,moe,STEM Multidisciplinary  MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_009E,Science and Engineering Related Fields,stem,STEM Related,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,stem8
+B15010_009M,Margin of Error forScience and Engineering Related Fields,moe,STEM Related MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_010E,Business,nonstem,Business,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_010M,Margin of Error forBusiness,moe,Business MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_011E,Education,nonstem,Education,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_011M,Margin of Error forEducation,moe,Education MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_012E,"Arts, Humanities, and OtherLiterature and Languages",nonstem,Arts Humanities Lit and Language,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_012M,"Margin of Error forArts, Humanities, and OtherLiterature and Languages",moe,Arts Humanities Lit and Language MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_013E,"Arts, Humanities, and OtherLiberal Arts and History",nonstem,Arts Humanities Liberal Arts and History,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_013M,"Margin of Error forArts, Humanities, and OtherLiberal Arts and History",moe,Arts Humanities Liberal Arts and History MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_014E,"Arts, Humanities, and OtherVisual and Performing Arts",nonstem,Arts Humanities Visual Performing Arts,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_014M,"Margin of Error forArts, Humanities, and OtherVisual and Performing Arts",moe,Arts Humanities Visual Performing Arts MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_015E,"Arts, Humanities, and OtherCommunications",nonstem,Arts Humanities Communications,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_015M,"Margin of Error forArts, Humanities, and OtherCommunications",moe,Arts Humanities Communications MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_016E,"Arts, Humanities, and OtherOther",nonstem,Arts Humanities Other,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
+B15010_016M,"Margin of Error forArts, Humanities, and OtherOther",moe,Arts Humanities Other MOE,B15010. Detailed Field of Bachelor's Degree for First Major for the Population 25 Years and Over,
